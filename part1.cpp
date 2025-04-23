@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
+#include <conio.h>
 using namespace std;
 class student{
 	private:
@@ -10,6 +11,7 @@ class student{
 		void insert();
 };
 void student::menu(){
+	menustart:
 	int choice;
 	char x;
 	cout<<"\t\t\t---------------------------"<<endl;
@@ -30,13 +32,19 @@ void student::menu(){
 
 	switch(choice){
 		case 1:
+		do{
 			insert();
+			cout<<"Add another student address (y/n): "<<endl;
+			cin>>x;
+		}while(x=='y' || x=='Y');
 			break;
+		case 6:
+			exit(0);
 		default:
-			cout<<"\n\t\t\t Invalid Choice...Please Try Again...";
-			break;
-
+			cout<<"\n\t\t  Invalid Choice...Please Try Again...";
 	}
+	getch();
+	goto menustart;
 }
 void student::insert(){
 	system("cls");
@@ -54,8 +62,9 @@ void student::insert(){
 	cin>>contact_no;
 	cout<<"\t\tEnter Address: ";
 	cin>>address;
-	
-
+	file.open("StudentRecord.txt",ios::app | ios::out);
+	file<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
+	file.close();
 }
 int main(){
 	student project;
