@@ -9,6 +9,7 @@ class student{
 	public:
 		void menu();
 		void insert();
+		void display();
 };
 void student::menu(){
 	menustart:
@@ -38,6 +39,9 @@ void student::menu(){
 			cin>>x;
 		}while(x=='y' || x=='Y');
 			break;
+		case 2:
+			display();
+			break;
 		case 6:
 			exit(0);
 		default:
@@ -64,6 +68,32 @@ void student::insert(){
 	cin>>address;
 	file.open("StudentRecord.txt",ios::app | ios::out);
 	file<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
+	file.close();
+}
+void student::display(){
+	system("cls");
+	fstream file;
+	int total=0;
+	cout<<"\n-------------------Student Record Table-------------------"<<endl;
+	file.open("StudentRecord.txt", ios::in);
+	if(!file){
+		cout<<"\n\t\t\tNo Data Found..."<<endl;
+		file.close();
+	}else{
+		file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+		while(!file.eof()){
+			cout<<"\n\t\t\t Student Number: "<<total++<<endl;
+			cout<<"\t\t\t Student Name: "<<name<<endl;
+			cout<<"\t\t\t Student Roll Number: "<<roll_no<<endl;
+			cout<<"\t\t\t Student Course: "<<course<<endl;
+			cout<<"\t\t\t Student Email ID.: "<<email_id<<endl;
+			cout<<"\t\t\t Student Address: "<<address<<endl;
+			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+		}
+		if(!total){
+			cout<<"\n\t\t\tNo Data Found..."<<endl;
+		}
+	}
 	file.close();
 }
 int main(){
