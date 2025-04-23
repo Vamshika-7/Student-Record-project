@@ -54,8 +54,7 @@ void student::insert(){
 	cin>>contact_no;
 	cout<<"\t\tEnter Address: ";
 	cin>>address;
-	cout<<"\t\tEnter Name: ";
-	cin>>name;
+	
 
 }
 int main(){
