@@ -10,6 +10,7 @@ class student{
 		void menu();
 		void insert();
 		void display();
+		void modify();
 };
 void student::menu(){
 	menustart:
@@ -41,6 +42,9 @@ void student::menu(){
 			break;
 		case 2:
 			display();
+			break;
+		case 3:
+			modify();
 			break;
 		case 6:
 			exit(0);
@@ -95,6 +99,52 @@ void student::display(){
 		}
 	}
 	file.close();
+}
+void student::modify(){
+	system("cls");
+	fstream file,file1;
+	int found=0;
+	string rollNo;
+	cout<<"\n-------------------MOdify Student Details-------------------"<<endl;
+	file.open("StudentRecord.txt", ios::in);
+	if(!file){
+		cout<<"\n\t\t\tNo Data Is Present"<<endl;
+		file.close();
+	}else{
+		cout<<"\nEnter the roll number of the student you want to modify"<<endl;
+		cin>>rollNo;
+		file1.open("Record.txt", ios::app | ios::out);
+		file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+		while(!file.eof()){
+			if(rollNo!=roll_no){
+				file1<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
+			}else{
+				cout<<"\t\tEnter Name: ";
+				cin>>name;
+				cout<<"\t\tEnter Roll Number: ";
+				cin>>roll_no;
+				cout<<"\t\tEnter Course: ";
+				cin>>course;
+				cout<<"\t\tEnter Email ID: ";
+				cin>>email_id;
+				cout<<"\t\tEnter Contact Number: ";
+				cin>>contact_no;
+				cout<<"\t\tEnter Address: ";
+				cin>>address;
+				file1<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
+				found++;
+			}
+			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+			if(found==0){
+				cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
+			}
+		}
+		file1.close();
+		file.close();
+		remove("StudentRecord.txt");
+		rename("Record.txt","StudentRecord.txt");
+	}
+
 }
 int main(){
 	student project;
