@@ -110,6 +110,7 @@ void student::modify(){
 	if(!file){
 		cout<<"\n\t\t\tNo Data Is Present"<<endl;
 		file.close();
+		return;
 	}else{
 		cout<<"\nEnter the roll number of the student you want to modify"<<endl;
 		cin>>rollNo;
@@ -135,9 +136,10 @@ void student::modify(){
 				found++;
 			}
 			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
-			if(found==0){
-				cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
-			}
+			
+		}
+		if(found==0){
+			cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
 		}
 		file1.close();
 		file.close();
