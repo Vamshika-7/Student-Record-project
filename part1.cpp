@@ -11,6 +11,7 @@ class student{
 		void insert();
 		void display();
 		void modify();
+		void search();
 };
 void student::menu(){
 	menustart:
@@ -45,6 +46,9 @@ void student::menu(){
 			break;
 		case 3:
 			modify();
+			break;
+		case 4:
+		    search();
 			break;
 		case 6:
 			exit(0);
@@ -136,17 +140,28 @@ void student::modify(){
 				found++;
 			}
 			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
-			
-		}
-		if(found==0){
-			cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
+			if(found==0){
+				cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
+			}
 		}
 		file1.close();
 		file.close();
 		remove("StudentRecord.txt");
 		rename("Record.txt","StudentRecord.txt");
 	}
-
+}
+void student::search(){
+	system("cls");
+	fstream file;
+	file.open("StudentRecord.txt", ios::in);
+	if(!file){
+		cout<<"\n-------------------Search Student Data-------------------"<<endl;
+		cout<<"\n\t\t\tNo Data Found..."<<endl; 
+	}else{
+		string rollno;
+		cout<<"\n-------------------Search Student Data-------------------"<<endl;
+		cin>>rollno;
+	}
 }
 int main(){
 	student project;
