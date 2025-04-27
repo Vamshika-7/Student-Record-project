@@ -153,6 +153,7 @@ void student::modify(){
 void student::search(){
 	system("cls");
 	fstream file;
+	int found=0;
 	file.open("StudentRecord.txt", ios::in);
 	if(!file){
 		cout<<"\n-------------------Search Student Data-------------------"<<endl;
@@ -160,7 +161,24 @@ void student::search(){
 	}else{
 		string rollno;
 		cout<<"\n-------------------Search Student Data-------------------"<<endl;
+		cout<<"Enter Roll number of student which you want to search: "<<endl;
 		cin>>rollno;
+		file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+		while(!file.eof()){
+			if(rollno==roll_no){
+				cout<<"\t\t\t Student Name: "<<name<<endl;
+				cout<<"\t\t\t Student Roll Number: "<<roll_no<<endl;
+				cout<<"\t\t\t Student Course: "<<course<<endl;
+				cout<<"\t\t\t Student Email ID.: "<<email_id<<endl;
+				cout<<"\t\t\t Student Address: "<<address<<endl;
+				found++;
+			}
+			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+		}
+		if(found==0){
+			cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
+		}
+		file.close();
 	}
 }
 int main(){
