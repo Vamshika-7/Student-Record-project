@@ -12,6 +12,7 @@ class student{
 		void display();
 		void modify();
 		void search();
+		void Delete();
 };
 void student::menu(){
 	menustart:
@@ -49,6 +50,9 @@ void student::menu(){
 			break;
 		case 4:
 		    search();
+			break;
+		case 5:
+			Delete();
 			break;
 		case 6:
 			exit(0);
@@ -180,6 +184,35 @@ void student::search(){
 		}
 		file.close();
 	}
+}
+void student::Delete(){
+	system("cls");
+	fstream file,file1;
+	string rollno;
+	int found=0;
+	cout<<"\n-------------------Delete Student Details-------------------"<<endl;
+	file.open("StudentRecord.txt", ios::in);
+	if(!file){
+		cout<<"\n\t\t\tNo Data Found..."<<endl;
+	}else{
+		cout<<"\nEnter Roll Number Of Student Which You Want To Delete: "<<endl;
+		cin>>rollno;
+		file1.open("Record.txt",ios::app | ios::out);
+		file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+		while(!file.eof()){
+			if(rollno!=roll_no){
+				file1<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
+			}
+			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+		}
+		if(found==0){
+			cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
+		}
+		file1.close();
+		file.close();
+		remove("StudentRecord.txt");
+		rename("Record.txt","StudentRecord.txt");
+	}  
 }
 int main(){
 	student project;
