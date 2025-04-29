@@ -136,8 +136,9 @@ void student::display(){
 			cout<<"\t\t\t Student Roll Number: "<<roll_no<<endl;
 			cout<<"\t\t\t Student Course: "<<course<<endl;
 			cout<<"\t\t\t Student Email ID.: "<<email_id<<endl;
+			cout<<"\t\t\t Student Contact Number: "<<contact_no<<endl;
 			cout<<"\t\t\t Student Address: "<<address<<endl;
-			cout<<"\t\t\t Student MArks: "<<marks<<endl;
+			cout<<"\t\t\t Student Marks: "<<marks<<endl;
 			cout<<"\t\t\t Performance: "<<(marks>=40 ? "Pass" : "Fail")<<endl;
 			
 		}
@@ -208,33 +209,31 @@ void student::search(){
 	int found=0;
 	file.open("StudentRecord.txt", ios::in);
 	if(!file){
-		cout<<"\n-------------------Search Student Data-------------------"<<endl;
 		cout<<"\n\t\t\tNo Data Found..."<<endl; 
-	}else{
-		string rollno;
-		cout<<"\n-------------------Search Student Data-------------------"<<endl;
-		cout<<"Enter Roll number of student which you want to search: "<<endl;
-		cin>>rollno;
-
-		int marks;
-		file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks;
-		while(!file.eof()){
-			if(rollno==roll_no){
-				cout<<"\t\t\t Student Name: "<<name<<endl;
-				cout<<"\t\t\t Student Roll Number: "<<roll_no<<endl;
-				cout<<"\t\t\t Student Course: "<<course<<endl;
-				cout<<"\t\t\t Student Email ID.: "<<email_id<<endl;
-				cout<<"\t\t\t Student Address: "<<address<<endl;
-				cout<<"\t\t\t Student Marks: "<<marks<<endl;
-				found++;
-			}
-			file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks;
-		}
-		if(found==0){
-			cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
-		}
-		file.close();
+		return;
 	}
+	string rollno;
+	cout<<"\n-------------------Search Student Data-------------------"<<endl;
+	cout<<"Enter Roll number of student which you want to search: "<<endl;
+	cin>>rollno;
+
+	while(file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks){
+		if(rollno==roll_no){
+			cout<<"\t\t\t Student Name: "<<name<<endl;
+			cout<<"\t\t\t Student Roll Number: "<<roll_no<<endl;
+			cout<<"\t\t\t Student Course: "<<course<<endl;
+			cout<<"\t\t\t Student Email ID.: "<<email_id<<endl;
+			cout<<"\t\t\t Student Contact Number: "<<contact_no<<endl;
+			cout<<"\t\t\t Student Address: "<<address<<endl;
+			cout<<"\t\t\t Student Marks: "<<marks<<endl;
+			found=1;
+			break;
+		}
+	}
+	if(found==0){
+		cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
+	}
+	file.close();	
 }
 void student::Delete(){
 	system("cls");
@@ -245,28 +244,28 @@ void student::Delete(){
 	file.open("StudentRecord.txt", ios::in);
 	if(!file){
 		cout<<"\n\t\t\tNo Data Found..."<<endl;
+		return;
+	}
+	cout<<"\nEnter Roll Number Of Student Which You Want To Delete: "<<endl;
+	cin>>rollno;
+	file1.open("Record.txt",ios::out);
+
+	while(file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks){
+		if(rollno!=roll_no){
+			file1<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<" "<<marks<<"\n";
+		}else{
+			found=1;
+		}
+	}
+	file1.close();
+	file.close();
+	if(found==0){
+		cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
 	}else{
-		cout<<"\nEnter Roll Number Of Student Which You Want To Delete: "<<endl;
-		cin>>rollno;
-		file1.open("Record.txt",ios::app | ios::out);
-
-		int marks;
-		file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks;
-
-		while(!file.eof()){
-			if(rollno!=roll_no){
-				file1<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<" "<<marks<<endl;
-			}else found++;
-			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
-		}
-		if(found==0){
-			cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
-		}
-		file1.close();
-		file.close();
 		remove("StudentRecord.txt");
-		rename("Record.txt","StudentRecord.txt");
-	}  
+	    rename("Record.txt","StudentRecord.txt");
+		cout<<"\n\t\tRecord Deleted Successfully!"<<endl;
+	}	  
 }
 int main(){
 	student project;
