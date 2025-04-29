@@ -152,20 +152,19 @@ void student::modify(){
 	fstream file,file1;
 	int found=0;
 	string rollNo;
-	cout<<"\n-------------------MOdify Student Details-------------------"<<endl;
+	cout<<"\n-------------------Modify Student Details-------------------"<<endl;
 	file.open("StudentRecord.txt", ios::in);
 	if(!file){
 		cout<<"\n\t\t\tNo Data Is Present"<<endl;
 		return;
-	}else{
-		cout<<"\nEnter the roll number of the student you want to modify"<<endl;
+	}
+		cout<<"\nEnter the roll number of the student you want to modify";
 		cin>>rollNo;
 		file1.open("Record.txt", ios::out);
 		
 		while(file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks){
-			if(rollNo!=roll_no){
-				file1<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<" "<<marks<<"\n";
-			}else{
+			if(rollNo==roll_no){
+				cout<<"\n\t\tRecord Found.Enter New Details:\n";
 				cout<<"\t\tEnter Name: ";
 				cin>>name;
 				cout<<"\t\tEnter Roll Number: ";
@@ -186,19 +185,22 @@ void student::modify(){
 						cout<<"\t\tInvalid Marks! Please Enter Between 0 and 100"<<endl;
 					}
 				}while(marks<0 || marks>100);
-
-				file1<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
-				found++;
+				found=1;
 			}
+			file1 << name <<" "<< roll_no <<" "<< course <<" "<< email_id <<" "<< contact_no <<" "<< address <<" "<< marks <<"\n";
 		}
-		if(found==0){
-			cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
-		}
+		
 		file1.close();
-		file.close();
-		remove("StudentRecord.txt");
-		rename("Record.txt","StudentRecord.txt");
+	file.close();
+
+	if(found==0){
+		cout<<"\n\t\tStudent Roll Number Not Found..."<<endl;
+	}else{
+		cout<<"\n\t\tRecord Updated Successfully!"<<endl;
 	}
+	remove("StudentRecord.txt");
+	rename("Record.txt","StudentRecord.txt");
+	
 }
 void student::search(){
 	system("cls");
