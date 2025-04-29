@@ -130,8 +130,8 @@ void student::display(){
 		file.close();
 	}else{
 		
-		while(!file.eof()){
-			cout<<"\n\t\t\t Student Number: "<<total++<<endl;
+		while(file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks){
+			cout<<"\n\t\t\t Student Number: "<<++total<<endl;
 			cout<<"\t\t\t Student Name: "<<name<<endl;
 			cout<<"\t\t\t Student Roll Number: "<<roll_no<<endl;
 			cout<<"\t\t\t Student Course: "<<course<<endl;
@@ -139,7 +139,7 @@ void student::display(){
 			cout<<"\t\t\t Student Address: "<<address<<endl;
 			cout<<"\t\t\t Student MArks: "<<marks<<endl;
 			cout<<"\t\t\t Performance: "<<(marks>=40 ? "Pass" : "Fail")<<endl;
-			file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks;
+			
 		}
 		if(!total){
 			cout<<"\n\t\t\tNo Data Found..."<<endl;
@@ -156,16 +156,15 @@ void student::modify(){
 	file.open("StudentRecord.txt", ios::in);
 	if(!file){
 		cout<<"\n\t\t\tNo Data Is Present"<<endl;
-		file.close();
 		return;
 	}else{
 		cout<<"\nEnter the roll number of the student you want to modify"<<endl;
 		cin>>rollNo;
-		file1.open("Record.txt", ios::app | ios::out);
-		file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
-		while(!file.eof()){
+		file1.open("Record.txt", ios::out);
+		
+		while(file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks){
 			if(rollNo!=roll_no){
-				file1<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
+				file1<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<" "<<marks<<"\n";
 			}else{
 				cout<<"\t\tEnter Name: ";
 				cin>>name;
@@ -188,10 +187,9 @@ void student::modify(){
 					}
 				}while(marks<0 || marks>100);
 
-				file1<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
+				file1<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
 				found++;
 			}
-			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
 		}
 		if(found==0){
 			cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
