@@ -6,6 +6,7 @@ using namespace std;
 class student{
 	private:
 		string name,roll_no,course,address,email_id,contact_no;
+		int marks;
 	public:
 		void menu();
 		void insert();
@@ -36,11 +37,12 @@ void student::menu(){
 
 	switch(choice){
 		case 1:
-		do{
-			insert();
-			cout<<"Add another student address (y/n): "<<endl;
-			cin>>x;
-		}while(x=='y' || x=='Y');
+			do{
+				insert();
+				cout<<"Add another student address (y/n): ";
+				cin>>x;
+				cin.ignore();
+			}while(x=='y' || x=='Y');
 			break;
 		case 2:
 			display();
@@ -64,22 +66,57 @@ void student::menu(){
 }
 void student::insert(){
 	system("cls");
-	fstream file;
+	fstream file,file2;
+	string duplicateRoll;
+	int count=0;
 	cout<<"\n-------------------Add Student Details-------------------"<<endl;
-	cout<<"\t\tEnter Name: ";
-	cin>>name;
 	cout<<"\t\tEnter Roll Number: ";
-	cin>>roll_no;
+	cin>>duplicateRoll;
+
+
+	file2.open("StudentRecord.txt", ios::in);
+	string tempName,tempRoll,tempCourse,tempEmail,tempContact,tempAddress;
+	int tempMarks;
+	bool isDuplicate=false;
+	while(file2 >> tempName >> tempRoll >> tempCourse >> tempEmail >> tempContact >> tempAddress >> tempMarks){
+		if(duplicateRoll==tempRoll){
+			isDuplicate=true;
+			break;
+		}
+	}
+	file2.close();
+
+	if(isDuplicate){
+		cout<<"\n\tError: Duplicate Roll Number...Entry Of Details Failed..."<<endl;
+		return;
+	}
+	roll_no=duplicateRoll;
+	cin.ignore();
+	cout<<"\t\tEnter Name: ";
+	getline(cin,name);
 	cout<<"\t\tEnter Course: ";
-	cin>>course;
+	getline(cin,course);
 	cout<<"\t\tEnter Email ID: ";
-	cin>>email_id;
+	getline(cin,email_id);
 	cout<<"\t\tEnter Contact Number: ";
-	cin>>contact_no;
+	getline(cin,contact_no);
 	cout<<"\t\tEnter Address: ";
-	cin>>address;
+	getline(cin,address);
+
+	do{
+		cout<<"\t\tEnter Marks(0-100): ";
+		cin>>marks;
+		if(marks<0 || marks>100){
+			cout<<"\n\t\tInvalid...Enter Marks Again..."<<endl;
+		}
+	}while(marks<0 || marks>100);
+
 	file.open("StudentRecord.txt",ios::app | ios::out);
-	file<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
+	file.seekp(0,ios::end);
+	if(file.tellp()>0){
+		file<<"\n";
+	}
+	file<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<" "<<marks<<"\n";
 	file.close();
 }
 void student::display(){
@@ -92,7 +129,7 @@ void student::display(){
 		cout<<"\n\t\t\tNo Data Found..."<<endl;
 		file.close();
 	}else{
-		file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+		
 		while(!file.eof()){
 			cout<<"\n\t\t\t Student Number: "<<total++<<endl;
 			cout<<"\t\t\t Student Name: "<<name<<endl;
@@ -100,7 +137,9 @@ void student::display(){
 			cout<<"\t\t\t Student Course: "<<course<<endl;
 			cout<<"\t\t\t Student Email ID.: "<<email_id<<endl;
 			cout<<"\t\t\t Student Address: "<<address<<endl;
-			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+			cout<<"\t\t\t Student MArks: "<<marks<<endl;
+			cout<<"\t\t\t Performance: "<<(marks>=40 ? "Pass" : "Fail")<<endl;
+			file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks;
 		}
 		if(!total){
 			cout<<"\n\t\t\tNo Data Found..."<<endl;
@@ -140,13 +179,22 @@ void student::modify(){
 				cin>>contact_no;
 				cout<<"\t\tEnter Address: ";
 				cin>>address;
+
+				do{
+					cout<<"\t\tEnter Marks (0-100): ";
+					cin>>marks;
+					if(marks<0 || marks>100){
+						cout<<"\t\tInvalid Marks! Please Enter Between 0 and 100"<<endl;
+					}
+				}while(marks<0 || marks>100);
+
 				file1<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
 				found++;
 			}
 			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
-			if(found==0){
-				cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
-			}
+		}
+		if(found==0){
+			cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
 		}
 		file1.close();
 		file.close();
@@ -167,7 +215,9 @@ void student::search(){
 		cout<<"\n-------------------Search Student Data-------------------"<<endl;
 		cout<<"Enter Roll number of student which you want to search: "<<endl;
 		cin>>rollno;
-		file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+
+		int marks;
+		file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks;
 		while(!file.eof()){
 			if(rollno==roll_no){
 				cout<<"\t\t\t Student Name: "<<name<<endl;
@@ -175,9 +225,10 @@ void student::search(){
 				cout<<"\t\t\t Student Course: "<<course<<endl;
 				cout<<"\t\t\t Student Email ID.: "<<email_id<<endl;
 				cout<<"\t\t\t Student Address: "<<address<<endl;
+				cout<<"\t\t\t Student Marks: "<<marks<<endl;
 				found++;
 			}
-			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+			file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks;
 		}
 		if(found==0){
 			cout<<"\n\t\t\tStudent Roll Number Not Found..."<<endl;
@@ -198,11 +249,14 @@ void student::Delete(){
 		cout<<"\nEnter Roll Number Of Student Which You Want To Delete: "<<endl;
 		cin>>rollno;
 		file1.open("Record.txt",ios::app | ios::out);
-		file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
+
+		int marks;
+		file>> name >> roll_no >> course >> email_id >> contact_no >> address >> marks;
+
 		while(!file.eof()){
 			if(rollno!=roll_no){
-				file1<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<"\n";
-			}
+				file1<<" "<<name<<" "<<roll_no<<" "<<course<<" "<<email_id<<" "<<contact_no<<" "<<address<<" "<<marks<<endl;
+			}else found++;
 			file>> name >> roll_no >> course >> email_id >> contact_no >> address ;
 		}
 		if(found==0){
